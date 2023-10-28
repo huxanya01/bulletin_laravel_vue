@@ -50,6 +50,6 @@ class MessageController extends Controller
     {
         $message = Message::find($id);
         $this->authorize('delete', $message);
-        return Message::destroy($id);
+        return $message->delete();
     }
 }
