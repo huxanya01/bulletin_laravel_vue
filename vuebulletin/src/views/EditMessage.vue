@@ -6,15 +6,13 @@
         <button type="submit">Save</button>
       </form>
     </div>
-  </template>
+</template>
   
-  <script>
-  export default {
-    name: 'EditMessage',
-    methods: {
-      editMessage() {
-        // Handle editing of the message
-      }
-    }
-  };
-  </script>
+<script setup>
+  import { ref } from 'vue';
+ // 定義編輯留言函數
+ function editMessage() {
+    // 處理編輯留言邏輯
+    console.log("EditMessage logic executed");
+  }
+</script>

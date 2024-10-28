@@ -6,15 +6,13 @@
         <button type="submit">Submit</button>
       </form>
     </div>
-  </template>
+</template>
   
-  <script>
-  export default {
-    name: 'CreateMessage',
-    methods: {
-      createMessage() {
-        // Handle creation of a new message
-      }
-    }
-  };
-  </script>
+<script setup>
+  import { ref } from 'vue';
+ // 定義新增留言函數
+ function createMessage() {
+    // 處理新增留言邏輯
+    console.log("CreateMessage logic executed");
+  }
+</script>

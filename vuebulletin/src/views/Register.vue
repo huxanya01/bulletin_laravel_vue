@@ -6,19 +6,18 @@
         <button type="submit">Register</button>
       </form>
     </div>
-  </template>
+</template>
   
-  <script>
-  export default {
-    name: 'Register',
-    methods: {
-      register() {
-        // Handle registration logic
-      }
-    }
-  };
-  </script>
+<script setup>
+  import { ref } from 'vue';
   
-  <style scoped>
-  /* Optional: Add specific styles for the Register page */
-  </style>
+  // 定義註冊函數
+  function register() {
+    // 處理註冊邏輯
+    console.log("Register logic executed");
+  }
+</script>
+  
+<style scoped>
+/* Optional: Add specific styles for the Register page */
+</style>
