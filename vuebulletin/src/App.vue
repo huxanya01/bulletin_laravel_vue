@@ -4,7 +4,7 @@
     <nav>
       <router-link to="/">首頁</router-link>
       <router-link to="/messages">留言列表</router-link>
-      <router-link to="/messages/create">新增留言</router-link>
+      <router-link v-if="isLoggedIn" to="/messages/create">新增留言</router-link>
       
       <div class="auth-links">
         <router-link to="/login">登入</router-link>
@@ -68,9 +68,15 @@ nav a {
   gap: 1rem;
 }
 
+/* 讓主頁面內容置中顯示 */
 main {
   flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
   padding: 1.5rem;
+  /* min-height: calc(100vh - 180px);  減去導航欄和頁腳的高度 */
+  text-align: center; /* 可選：若內容是文字，讓它置中顯示 */
 }
 
 footer {

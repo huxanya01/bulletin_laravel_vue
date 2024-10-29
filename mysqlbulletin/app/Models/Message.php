@@ -17,4 +17,10 @@ class Message extends Model
     {
         return DB::table('messages')->whereNull('deleted_at')->orderBy('created_at', 'desc')->get();
     }
+
+     // 定義與 User 模型的關聯
+     public function user()
+     {
+         return $this->belongsTo(User::class);
+     }
 }

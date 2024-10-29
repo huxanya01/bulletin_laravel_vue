@@ -11,7 +11,11 @@ class MessageController extends Controller
      */
     public function index()
     {
-        return Message::findAll();
+         // 使用 `with` 方法載入 user 關聯，避免 N+1 問題
+         $messages = Message::with('user:id,name,email')->get();
+
+         return response()->json($messages);
+        // return Message::findAll();
     }
 
     /**

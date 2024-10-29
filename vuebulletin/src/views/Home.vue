@@ -1,7 +1,7 @@
 <template>
     <div>
-      <h1>Home Page</h1>
-      <p>Welcome to the message board application!</p>
+      <h1>首頁</h1>
+      <p>歡迎來到留言板!</p>
     </div>
 </template>
   

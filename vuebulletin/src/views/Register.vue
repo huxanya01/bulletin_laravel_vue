@@ -1,6 +1,6 @@
 <template>
     <div>
-      <h1>Register</h1>
+      <h1>註冊</h1>
       <form @submit.prevent="register">
         <!-- Add form fields for registration -->
         <button type="submit">Register</button>
