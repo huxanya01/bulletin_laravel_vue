@@ -5,11 +5,16 @@
       <router-link to="/">首頁</router-link>
       <router-link to="/messages">留言列表</router-link>
       <router-link v-if="isLoggedIn" to="/messages/create">新增留言</router-link>
-      
+
       <div class="auth-links">
-        <router-link to="/login">登入</router-link>
-        <router-link to="/register">註冊</router-link>
-        <button v-if="isLoggedIn" @click="logout">登出</button>
+        <template v-if="isLoggedIn">
+          <span>歡迎, {{ username }}</span>
+          <button @click="logout">登出</button>
+        </template>
+        <template v-else>
+          <router-link to="/login">登入</router-link>
+          <router-link to="/register">註冊</router-link>
+        </template>
       </div>
     </nav>
 
@@ -23,22 +28,52 @@
       <p>&copy; 2024 留言板應用</p>
     </footer>
   </div>
- <!-- <Messages/> -->
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import axios from 'axios';
 
 const router = useRouter();
 const isLoggedIn = ref(false); // 使用者登入狀態
+const username = ref(''); // 儲存使用者名稱
 
-function logout() {
-  // 模擬登出
-  isLoggedIn.value = false;
-  router.push('/login'); // 重定向至登入頁面
+function checkLoginStatus() {
+  const token = localStorage.getItem('token');
+  if (token) {
+    isLoggedIn.value = true;
+    username.value = localStorage.getItem('name') || '使用者'; // 取得使用者姓名
+  }
 }
-// import Messages from './components/Messages.vue'
+
+async function logout() {
+  try {
+    // 向 Laravel 後端發送登出請求
+    await axios.post('http://localhost:8000/api/logout', {}, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}` // 使用 token 驗證
+      }
+    });
+
+    // 移除本地的登入相關資訊
+    localStorage.removeItem('token');
+    localStorage.removeItem('name');
+    localStorage.removeItem('email');
+    isLoggedIn.value = false;
+    username.value = '';
+
+    // 重定向至留言列表頁面
+    router.push('/messages');
+  } catch (error) {
+    console.error('登出失敗:', error);
+  }
+}
+
+// 初次加載時檢查登入狀態
+onMounted(() => {
+  checkLoginStatus();
+});
 </script>
 
 <style>
@@ -68,15 +103,12 @@ nav a {
   gap: 1rem;
 }
 
-/* 讓主頁面內容置中顯示 */
 main {
   flex-grow: 1;
   display: flex;
   justify-content: center;
-  /* align-items: center; */
   padding: 1.5rem;
-  /* min-height: calc(100vh - 180px);  減去導航欄和頁腳的高度 */
-  text-align: center; /* 可選：若內容是文字，讓它置中顯示 */
+  text-align: center;
 }
 
 footer {
@@ -85,12 +117,4 @@ footer {
   background-color: #2c3e50;
   color: #fff;
 }
-/* #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-} */
 </style>
