@@ -26,8 +26,11 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useUserStore } from '@/stores/user';
 import axios from 'axios';
 
+const router = useRouter();
+const userStore = useUserStore();
 const email = ref('');
 const name = ref('');
 const password = ref('');
@@ -48,10 +51,11 @@ async function register() {
       password_confirmation: password_confirmation.value
     });
 
-    const { token, user } = response.data;
-    localStorage.setItem('token', token); // 儲存 token
-    localStorage.setItem('name', user.name); // 儲存使用者姓名
-    localStorage.setItem('email', user.email); // 儲存使用者電子郵件
+    const { user, token } = response.data;
+    userStore.login(user, token);
+    // localStorage.setItem('token', token); // 儲存 token
+    // localStorage.setItem('name', user.name); // 儲存使用者姓名
+    // localStorage.setItem('email', user.email); // 儲存使用者電子郵件
     alert("註冊成功！");
     router.push('/messages'); // 導引到 /messages
   } catch (error) {

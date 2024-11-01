@@ -19,10 +19,12 @@
 import { ref } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
+import { useUserStore } from '@/stores/user';
 
 const email = ref('');
 const password = ref('');
 const router = useRouter();
+const userStore = useUserStore();
 
 async function login() {
   try {
@@ -34,10 +36,11 @@ async function login() {
     // 假設回應包含 user 的 name, email 以及 token
     const {  user, token } = response.data;
 
+    userStore.login(user, token);
     // 儲存 token, name, email 到 localStorage
-    localStorage.setItem('name', user.name); // 儲存使用者姓名
-    localStorage.setItem('email', user.email); // 儲存使用者電子郵件
-    localStorage.setItem('token', token);
+    // localStorage.setItem('name', user.name); // 儲存使用者姓名
+    // localStorage.setItem('email', user.email); // 儲存使用者電子郵件
+    // localStorage.setItem('token', token);
     
     // 將使用者重導至留言列表頁面
     router.push('/messages');

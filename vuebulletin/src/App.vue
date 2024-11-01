@@ -8,7 +8,7 @@
 
       <div class="auth-links">
         <template v-if="isLoggedIn">
-          <span>歡迎, {{ username }}</span>
+          <span>歡迎, {{ userName }}</span>
           <button @click="logout">登出</button>
         </template>
         <template v-else>
@@ -31,21 +31,27 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { computed } from 'vue';
+// import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { useUserStore } from '@/stores/user';
 import axios from 'axios';
 
 const router = useRouter();
-const isLoggedIn = ref(false); // 使用者登入狀態
-const username = ref(''); // 儲存使用者名稱
+const userStore = useUserStore();
 
-function checkLoginStatus() {
-  const token = localStorage.getItem('token');
-  if (token) {
-    isLoggedIn.value = true;
-    username.value = localStorage.getItem('name') || '使用者'; // 取得使用者姓名
-  }
-}
+const isLoggedIn = computed(() => userStore.isLoggedIn);
+const userName = computed(() => userStore.userName);
+// const isLoggedIn = ref(false); // 使用者登入狀態
+// const username = ref(''); // 儲存使用者名稱
+
+// function checkLoginStatus() {
+//   const token = localStorage.getItem('token');
+//   if (token) {
+//     isLoggedIn.value = true;
+//     username.value = localStorage.getItem('name') || '使用者'; // 取得使用者姓名
+//   }
+// }
 
 async function logout() {
   try {
@@ -56,12 +62,13 @@ async function logout() {
       }
     });
 
+    userStore.logout();
     // 移除本地的登入相關資訊
-    localStorage.removeItem('token');
-    localStorage.removeItem('name');
-    localStorage.removeItem('email');
-    isLoggedIn.value = false;
-    username.value = '';
+    // localStorage.removeItem('token');
+    // localStorage.removeItem('name');
+    // localStorage.removeItem('email');
+    // isLoggedIn.value = false;
+    // username.value = '';
 
     // 重定向至留言列表頁面
     router.push('/messages');
@@ -71,9 +78,9 @@ async function logout() {
 }
 
 // 初次加載時檢查登入狀態
-onMounted(() => {
-  checkLoginStatus();
-});
+// onMounted(() => {
+//   checkLoginStatus();
+// });
 </script>
 
 <style>
