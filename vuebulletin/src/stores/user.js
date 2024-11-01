@@ -4,6 +4,7 @@ export const useUserStore = defineStore('user', {
   state: () => ({
     isLoggedIn: false,
     user: {
+      id: '',
       name: '',
       email: ''
     }
@@ -11,6 +12,7 @@ export const useUserStore = defineStore('user', {
   actions: {
     login(user, token) {
       this.isLoggedIn = true;
+      this.user.id = user.id;
       this.user.name = user.name;
       this.user.email = user.email;
       localStorage.setItem('token', token);
@@ -20,6 +22,7 @@ export const useUserStore = defineStore('user', {
     },
     logout() {
       this.isLoggedIn = false;
+      this.user.id = '';
       this.user.name = '';
       this.user.email = '';
       localStorage.removeItem('token');

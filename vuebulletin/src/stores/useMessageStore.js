@@ -40,5 +40,24 @@ export const useMessageStore = defineStore('messageStore', {
         throw error;
       }
     },
+
+    async updateMessage(id, updatedMessage) {
+        try {
+          const token = localStorage.getItem('token');
+          await axios.put(`http://localhost:8000/api/messages/${id}`, updatedMessage, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          
+          // 更新本地 messages 狀態
+          const messageIndex = this.messages.findIndex(m => m.id === id);
+          if (messageIndex !== -1) {
+            this.messages[messageIndex] = { ...this.messages[messageIndex], ...updatedMessage };
+          }
+        } catch (error) {
+          console.error("Error updating message:", error);
+          throw error;
+        }
+    }
+    
   },
 });

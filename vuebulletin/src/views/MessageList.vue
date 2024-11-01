@@ -2,37 +2,45 @@
   <div>
     <h1>留言列表</h1>
     <ul class="message-list">
-      <li v-for="message in messages" :key="message.id" class="message-item">
+      <li v-for="message in messageStore.messages" :key="message.id" class="message-item">
         <p><strong>發文者:</strong> {{ message.user.name }}</p>
         <p><strong>標題:</strong> {{ message.name }}</p>
         <p><strong>內容:</strong> {{ message.content }}</p>
         <p><strong>建立時間:</strong> {{ new Date(message.created_at).toLocaleString() }}</p>
         <p><strong>更新時間:</strong> {{ new Date(message.updated_at).toLocaleString() }}</p>
         <router-link :to="{ name: 'MessageDetail', params: { id: message.id }}">詳細</router-link>
+        
+        <!-- 只有當前使用者才顯示編輯按鈕 -->
+        <button v-if="message.user.id === userId" @click="goToEditMessage(message.id)">
+          編輯
+        </button>
       </li>
     </ul>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
+import { computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import { useUserStore } from '@/stores/user';
+import { useMessageStore } from '@/stores/useMessageStore';
 
-const messages = ref([]);
+// 引入 router 和 store
+const router = useRouter();
+const userStore = useUserStore();
+const messageStore = useMessageStore();
 
-// 方法：從後端獲取留言列表
-async function fetchMessages() {
-  try {
-    const response = await axios.get('http://localhost:8000/api/messages');
-    messages.value = response.data; // 假設後端返回的資料格式是 { data: [...] }
-  } catch (error) {
-    console.error("Error fetching messages:", error);
-  }
+// 當前用戶 ID，通過 Pinia 的 userStore
+const userId = computed(() => userStore.user.id);
+
+// 導向編輯留言頁面
+function goToEditMessage(messageId) {
+  router.push({ name: 'EditMessage', params: { id: messageId } });
 }
 
-// 組件掛載後執行 fetchMessages 方法
+// 組件掛載後執行
 onMounted(() => {
-  fetchMessages();
+  messageStore.fetchMessages(); // 直接調用 store 中的 fetchMessages 方法
 });
 </script>
 
