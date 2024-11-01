@@ -14,6 +14,9 @@
         <button v-if="message.user.id === userId" @click="goToEditMessage(message.id)">
           編輯
         </button>
+        <button v-if="message.user.id === userStore.user.id" @click="deleteMessage(message.id)">
+          刪除
+        </button>
       </li>
     </ul>
   </div>
@@ -36,6 +39,13 @@ const userId = computed(() => userStore.user.id);
 // 導向編輯留言頁面
 function goToEditMessage(messageId) {
   router.push({ name: 'EditMessage', params: { id: messageId } });
+}
+
+// 刪除留言
+function deleteMessage(messageId) {
+  if (confirm("確定要刪除這條留言嗎？")) {
+    messageStore.deleteMessage(messageId);
+  }
 }
 
 // 組件掛載後執行

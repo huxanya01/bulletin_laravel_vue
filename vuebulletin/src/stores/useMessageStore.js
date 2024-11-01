@@ -32,8 +32,12 @@ export const useMessageStore = defineStore('messageStore', {
           }
         );
 
+        // 新留言成功後，重新獲取留言列表
+        await this.fetchMessages();
+
         // 將新留言加入 messages 狀態
-        this.messages.push(response.data.data);
+        // this.messages.push(response.data.data);
+        
         return response.data.message; // 回傳成功訊息
       } catch (error) {
         console.error("新增留言錯誤:", error);
@@ -57,7 +61,22 @@ export const useMessageStore = defineStore('messageStore', {
           console.error("Error updating message:", error);
           throw error;
         }
-    }
-    
+    },
+
+     async deleteMessage(id) {
+      try {
+        const token = localStorage.getItem('token');
+        await axios.delete(`http://localhost:8000/api/messages/${id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        // 本地刪除已成功刪除的留言
+        this.messages = this.messages.filter(message => message.id !== id);
+      } catch (error) {
+        console.error("Error deleting message:", error);
+        throw error;
+      }
+    },
+
   },
 });
