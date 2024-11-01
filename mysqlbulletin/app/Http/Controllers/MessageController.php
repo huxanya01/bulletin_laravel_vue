@@ -33,7 +33,14 @@ class MessageController extends Controller
      */
     public function show(string $id)
     {
-        return Message::find($id);
+        // 使用 `with` 方法載入 user 關聯
+        $message = Message::with('user:id,name,email')->find($id);
+
+        // if (!$message) {
+        //     return response()->json(['message' => 'Message not found'], 404);
+        // }
+
+        return response()->json($message);
     }
 
     /**

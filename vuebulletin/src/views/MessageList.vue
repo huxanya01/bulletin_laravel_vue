@@ -8,6 +8,7 @@
         <p><strong>內容:</strong> {{ message.content }}</p>
         <p><strong>建立時間:</strong> {{ new Date(message.created_at).toLocaleString() }}</p>
         <p><strong>更新時間:</strong> {{ new Date(message.updated_at).toLocaleString() }}</p>
+        <router-link :to="{ name: 'MessageDetail', params: { id: message.id }}">詳細</router-link>
       </li>
     </ul>
   </div>
