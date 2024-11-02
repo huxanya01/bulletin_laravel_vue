@@ -26,7 +26,7 @@ export const useUserStore = defineStore('user', {
       this.user.name = '';
       this.user.email = '';
       localStorage.removeItem('token');
-      ocalStorage.removeItem('id');
+      localStorage.removeItem('id');
       localStorage.removeItem('name');
       localStorage.removeItem('email');
     }

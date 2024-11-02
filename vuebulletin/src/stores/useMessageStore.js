@@ -32,13 +32,10 @@ export const useMessageStore = defineStore('messageStore', {
           }
         );
 
-        // 新留言成功後，重新獲取留言列表
-        await this.fetchMessages();
-
         // 將新留言加入 messages 狀態
-        // this.messages.push(response.data.data);
+        this.messages.push(response.data);
         
-        return response.data.message; // 回傳成功訊息
+        return response.data; // 回傳成功訊息
       } catch (error) {
         console.error("新增留言錯誤:", error);
         throw error;

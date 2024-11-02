@@ -23,9 +23,20 @@ class MessageController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(['user_id'=>'required','name'=>'required']);
-
-        return Message::create($request->all());
+        $request->validate([
+            'user_id' => 'required',
+            'name' => 'required',
+            'content' => 'required', // 假設需要留言的內容
+        ]);
+    
+        // 創建留言
+        $message = Message::create($request->all());
+    
+        // 加載關聯的使用者資料
+        $message->load('user');
+    
+        // 回傳包含使用者資料的留言
+        return response()->json($message);
     }
 
     /**
