@@ -33,7 +33,7 @@ export const useMessageStore = defineStore('messageStore', {
         );
 
         // 將新留言加入 messages 狀態
-        this.messages.push(response.data);
+        this.messages.unshift(response.data);
         
         return response.data; // 回傳成功訊息
       } catch (error) {
