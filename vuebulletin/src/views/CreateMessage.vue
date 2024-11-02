@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Create Message</h1>
+    <h1>新增留言</h1>
     <form @submit.prevent="submitMessage">
       <label for="name">標題:</label>
       <input type="text" id="name" v-model="name" required />
